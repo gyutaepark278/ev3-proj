@@ -18,11 +18,6 @@ public:
     
     int m_speed;
     
-    bool get_proximity()
-    {
-        
-    }
-    
     bool get_touch_pressed()
     {
         return touch_q.is_pressed();
@@ -60,7 +55,17 @@ public:
 
     virtual int  get_speed()
     {
-        return 300;
+        return 200;
+    }
+    
+    virtual int  get_position()
+    {
+        return 250;
+    }
+    
+    virtual int  get_time()
+    {
+        return 3000;
     }
 
     virtual void set_down(bool val)
@@ -96,6 +101,10 @@ public:
     {
         m_speed = val;    
     }
+    void set_pos()
+    {
+        
+    }
 public:
     void example_code();
 };
@@ -114,22 +123,26 @@ void Crain::example_code()
         if(get_up())
         {   
                 a.set_speed_sp(-1*get_speed());
-                a.run_forever();
+                a.set_position_sp(250);
+                a.run_to_abs_pos();
         }   
         if(get_down())
         {
                 a.set_speed_sp(get_speed());
-                a.run_forever();
+                a.set_position_sp(-250);
+                a.run_to_abs_pos();
         }
         if(get_left())
         {
                b.set_speed_sp(get_speed());
-               b.run_forever();
+               b.set_time_sp(1000);
+               b.run_timed();
         }
         if(get_right())
         {
                b.set_speed_sp(-1* get_speed());
-               b.run_forever();
+               b.set_time_sp(2000);
+               b.run_timed();
         }
         if(get_enter())
         {
