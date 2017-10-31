@@ -5,18 +5,28 @@ class Crain : public CraneCrane
 private:
     ev3dev::touch_sensor touch_q;
     ev3dev::color_sensor color_q;
-    ev3dev::motor a;
-    ev3dev::motor b; 
-    ev3dev::motor c;
+    ev3dev::motor a;//up/down
+    ev3dev::motor b;//right/left
+    ev3dev::motor c;//hold/lose
     
+
 public:
     // Hardware Configuration
-    Crain():m_speed(0), touch_q(ev3dev::INPUT_2), color_q(ev3dev::INPUT_3), a(ev3dev::OUTPUT_B), b(ev3dev::OUTPUT_C), c(ev3dev::OUTPUT_A)
+    Crain():m_speed(0), color_q(ev3dev::INPUT_3), touch_q(ev3dev::INPUT_2), a(ev3dev::OUTPUT_B), b(ev3dev::OUTPUT_C), c(ev3dev::OUTPUT_A)//input3을 만들어야하나요?
     {
         
     }
     
     int m_speed;
+    
+    //position value
+    int pos;
+    
+    int get_color() 
+    {
+        return color_q.color();//With Color, the sensor evaluates the color of an object and outputs one of the following values:
+
+    }
     
     bool get_touch_pressed()
     {
@@ -53,19 +63,14 @@ public:
         return m_escape;
     }
 
-    virtual int  get_speed()
-    {
-        return 200;
-    }
-    
-    virtual int  get_position()
-    {
-        return 250;
-    }
-    
     virtual int  get_time()
     {
-        return 3000;
+        return 30; //
+    }
+    
+    virtual int  get_speed()
+    {
+        return 70; //여길만지면 빨라지고 시간단축 할듯!
     }
 
     virtual void set_down(bool val)
@@ -101,17 +106,13 @@ public:
     {
         m_speed = val;    
     }
-    void set_pos()
-    {
-        
-    }
 public:
     void example_code();
 };
 
 void Crain::example_code()
-{ //This function is for example, you should develop your own logics
-    while(true)
+{ 
+    while(get_escape() == false)
     {
         set_down(ev3dev::button::down.pressed());
         set_up(ev3dev::button::up.pressed());
@@ -120,51 +121,26 @@ void Crain::example_code()
         set_escape(ev3dev::button::back.pressed());
         set_enter(ev3dev::button::enter.pressed());
         
-        if(get_up())
-        {   
-                a.set_speed_sp(-1*get_speed());
-                a.set_position_sp(250);
-                a.run_to_abs_pos();
-        }   
-        if(get_down())
+        for(int i = 0; i < 3; i++ )
         {
-                a.set_speed_sp(get_speed());
-                a.set_position_sp(-250);
-                a.run_to_abs_pos();
-        }
-        if(get_left())
-        {
-               b.set_speed_sp(get_speed());
-               b.set_time_sp(1000);
-               b.run_timed();
-        }
-        if(get_right())
-        {
-               b.set_speed_sp(-1* get_speed());
-               b.set_time_sp(2000);
-               b.run_timed();
-        }
-        if(get_enter())
-        {
-               c.set_speed_sp(-1* get_speed());
-               c.run_forever();
-        }
-        if(get_escape())
-        {
-               c.set_speed_sp(get_speed());
-               c.run_forever();
-        }
-       
-       
-        if(!(get_up() | get_down() | get_right() | get_left() | get_enter() | get_escape()))
-        {
-            a.set_speed_sp(0);
-            a.run_forever();
-            b.set_speed_sp(0);
+            b.set_speed_sp(1* get_speed()); //b= r/l
             b.run_forever();
-            c.set_speed_sp(0);
-            c.run_forever();
+        
+            if(get_color() == 1)//완성되면 != white color(6)으로 바꿔주자!
+            {
+                b.stop(); //if color sensor find black color, then stop
+                pos=b.position();
+                b.set_position_sp(pos);
+                a.set_speed_sp(get_speed());//일정하게 내려가야함
+                a.set_position_sp(100);
+                a.run_to_abs_pos();
+                c.set_speed_sp(get_speed());//잡아주고,(대신 계속 돌아가면 rotate되니까 일정한 값을 다시 시도해보자
+                a.set_speed_sp(-1*get_speed());//올라가고
+                b.set_speed_sp(-1* get_speed());//finish point까지 가야함.
+                b.run_to_abs_pos();
+            }
         }
+        
     }
 
     a.stop();
@@ -178,8 +154,7 @@ int main()
     while(true){
         if(crain.get_touch_pressed()==true){ 
             
-        
-        crain.example_code(); //This line is for example, you should erase this ex_code in your 'real code' 
+        crain.example_code();  
   
         }
     }
