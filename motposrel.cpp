@@ -96,7 +96,7 @@ public:
 
 void Crain::position_Test(){ 
     b.set_speed_sp(get_speed());
-    b.set_position_sp(300);
+    b.set_position_sp(-300);
     b.run_to_rel_pos();
 }
 

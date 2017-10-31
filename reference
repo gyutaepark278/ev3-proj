@@ -1,14 +1,14 @@
-scp ~/Downloads/motposrel robot@192.168.0.16:~/motposrel
+scp ~/Downloads/motpos robot@192.168.0.16:~/motpos
 yes
 maker
 ssh robot@192.168.0.16
 maker
 ls
-sudo chmod 775 motposrel
+sudo chmod 775 motpos
 maker
 ls
-./motposrel
-sudo rm motposrel
+./motpos
+sudo rm motpos
 
 
 우리는 DC Motor
@@ -20,6 +20,6 @@ a.set_position(n)
 
 시계방향, 아래방향 +
 
-a(Bout) = 위 아래
-b(Cout) = 좌 우 (-330 ~ 230)
-c(Aout) = 잡기
+a(Bout) = 위 아래 (300)
+b(Cout) = 좌 우 (180도 : 560)
+c(Aout) = 잡기 (80)

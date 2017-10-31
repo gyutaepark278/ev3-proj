@@ -96,8 +96,14 @@ public:
 
 void Crain::position_Test(){ 
     b.set_speed_sp(get_speed());
-    b.set_position_sp(500);
+    b.set_position_sp(560);
     b.run_to_abs_pos();
+    a.set_speed_sp(get_speed());
+    a.set_position_sp(300);
+    a.run_to_abs_pos();
+    c.set_speed_sp(get_speed());
+    c.set_position_sp(80);
+    c.run_to_abs_pos();
 }
 
 
