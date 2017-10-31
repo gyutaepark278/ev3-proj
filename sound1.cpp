@@ -3,7 +3,7 @@
 using namespace ev3dev;
 
 int main() {
-    sound::speak("Huhak-gak? In jung? ng in jung.", true);
+    sound::speak("Ozigo Zirigo Let it go home.", true);
     sound::tone({
             {329.6, 350, 100}, {329.6, 350, 100}, {349.2, 350, 100}, {392, 350, 100},
             {392, 350, 100}, {349.2, 350, 100}, {329.6, 350, 100}, {293.7, 350, 100},

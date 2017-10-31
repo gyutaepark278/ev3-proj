@@ -1,0 +1,11 @@
+scp ~/Downloads/practice robot@192.168.0.16:~/practice
+yes
+maker
+ssh robot@192.168.0.16
+maker
+ls
+sudo chmod 775 practice
+maker
+ls
+./practice
+sudo rm practice
