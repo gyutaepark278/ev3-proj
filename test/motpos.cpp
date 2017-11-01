@@ -17,6 +17,8 @@ public:
     
     int m_speed;
     
+    int m_pos;
+    
     bool get_touch_pressed()
     {
         return touch_q.is_pressed();
@@ -98,12 +100,12 @@ void Crain::position_Test(){
     b.set_speed_sp(get_speed());
     b.set_position_sp(560);
     b.run_to_abs_pos();
-    if(b.position()==560)
+    if(b.position_sp()==100)
         {
             a.set_speed_sp(get_speed());
             a.set_position_sp(300);
             a.run_to_abs_pos();
-            if(a.position()==300)
+            if(a.position()==100)
                 {
                     c.set_speed_sp(get_speed());
                     c.set_position_sp(80);
