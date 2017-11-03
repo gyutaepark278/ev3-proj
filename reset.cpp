@@ -96,22 +96,14 @@ public:
     void position_Test();
 };
 
-void Crain::position_Test(){ 
+void Crain::position_Test(){
     b.set_speed_sp(get_speed());
-    b.set_position_sp(560);
+    b.set_position_sp(0);
     b.run_to_abs_pos();
-    if(b.position_sp()==100)
-        {
-            a.set_speed_sp(get_speed());
-            a.set_position_sp(300);
-            a.run_to_abs_pos();
-            if(a.position()==100)
-                {
-                    c.set_speed_sp(get_speed());
-                    c.set_position_sp(80);
-                    c.run_to_abs_pos();
-                }
-        }
+    a.set_speed_sp(get_speed());
+    a.set_position_sp(0);
+    a.run_to_abs_pos();
+    
 }
 
 
@@ -119,7 +111,7 @@ void Crain::position_Test(){
 int main(){     
     Crain crain;
     while(true){
-        if(crain.get_touch_pressed()==true){ 
+        if(crain.get_touch_pressed()==false){ 
             
         
         crain.position_Test();

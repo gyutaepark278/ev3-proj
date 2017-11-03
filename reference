@@ -1,12 +1,19 @@
-scp ~/Downloads/complete robot@192.168.0.16:~/complete
+scp ~/Downloads/practice robot@192.168.0.16:~/practice
 yes
 maker
 ssh robot@192.168.0.16
 maker
 ls
-sudo chmod 775 complete
+sudo chmod 775 practice
 maker
 ls
-./complete
-sudo rm complete
+./practice
+sudo rm practice
+
+
+192.168.0.16
+
+B-a-updown
+C-b-rightleft
+A-c-grab
 
