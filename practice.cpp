@@ -21,7 +21,7 @@ public:
     
     int m_speed;
     
-    float dist;
+    int m_pos;
     
     float get_distance() 
     {
@@ -70,7 +70,7 @@ public:
     
     virtual int  get_speed()
     {
-        return 200; //여길만지면 빨라지고 시간단축 할듯!
+        return 100; //여길만지면 빨라지고 시간단축 할듯!
     }
 
     virtual void set_down(bool val)
@@ -113,26 +113,32 @@ public:
 
 void Crain::example_code()
 {
+    float dist;
     b.set_speed_sp(get_speed()); //b= r/l
+    
     b.set_position_sp(560);
     b.run_to_abs_pos();
     dist=get_distance();
-    while(dist > 5){
+    while(dist > 3){
         dist=get_distance();
-        if(dist <= 20){
+        if(dist <= 7){
             b.stop();
+            // b.set_position_sp(-10);
+            // b.run_to_rel_pos();
+            // m_pos=b.position();
             a.set_speed_sp(get_speed());
+            // a.set_position_sp(200);
+            // a.run_to_abs_pos();
             a.run_forever();
         }
+    a.stop();
     }
     /*
-    a.stop();
     a.set_speed_sp(-1*get_speed());
     a.set_position_sp(0);
     a.run_to_abs_pos();
     }
-    
-    
+
     if(get_distance() <= 20){
         
     }

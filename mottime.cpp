@@ -94,7 +94,8 @@ public:
     void position_Test();
 };
 
-void Crain::position_Test(){ 
+void Crain::position_Test(){
+    /*
     b.set_speed_sp(get_speed());
     b.set_time_sp(4000);
     b.run_timed();
@@ -102,10 +103,10 @@ void Crain::position_Test(){
     a.set_speed_sp(get_speed());
     a.set_time_sp(3000);
     a.run_timed();
-    
+    */
     c.set_speed_sp(-1*get_speed());
     c.set_time_sp(1000);
-    c.run_timed();
+    c.run_timed();./
 }
 
 

@@ -97,7 +97,8 @@ public:
     void position_Test();
 };
 
-void Crain::position_Test(){ 
+void Crain::position_Test(){
+    /*
     b.set_speed_sp(get_speed());
     b.set_position_sp(200);
     b.run_to_abs_pos();
@@ -108,6 +109,24 @@ void Crain::position_Test(){
     sleep(3);
     b.set_position_sp(m_pos);
     b.run_to_abs_pos();
+    */
+    b.set_speed_sp(get_speed());
+    b.set_position_sp(200);
+    b.run_to_abs_pos();
+    sleep(3);
+    c.set_speed_sp(get_speed());
+    c.set_position_sp(0);
+    c.run_to_abs_pos();
+    sleep(2);
+    c.set_position_sp(-50);
+    c.run_to_abs_pos();
+    sleep(2);
+    c.set_position_sp(50);
+    c.run_to_abs_pos();
+    sleep(2);
+    c.set_position_sp(-100);
+    c.run_to_abs_pos();
+    
     /*
     while(true){
         m_pos=b.position();

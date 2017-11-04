@@ -1,28 +1,27 @@
 #include "h_crane.h"
+#include "iostream"
 
 class Crain : public CraneCrane
 {
 private:
     ev3dev::touch_sensor touch_q;
-    ev3dev::color_sensor color_q;
-    ev3dev::motor a;//up/down
-    ev3dev::motor b;//right/left
-    ev3dev::motor c;//hold/lose
+    ev3dev::ultrasonic_sensor ultrasonic_q;
+    ev3dev::motor a;
+    ev3dev::motor b; 
+    ev3dev::motor c;
     
-
 public:
     // Hardware Configuration
-    Crain():m_speed(0), color_q(ev3dev::INPUT_3), touch_q(ev3dev::INPUT_2), a(ev3dev::OUTPUT_B), b(ev3dev::OUTPUT_C), c(ev3dev::OUTPUT_A)//input3을 만들어야하나요?
+    Crain():m_speed(0), touch_q(ev3dev::INPUT_2), ultrasonic_q(ev3dev::INPUT_3), a(ev3dev::OUTPUT_B), b(ev3dev::OUTPUT_C), c(ev3dev::OUTPUT_A)
     {
         
     }
     
     int m_speed;
     
-
-    int get_color() 
+    float get_distance() 
     {
-        return color_q.color();//With Color, the sensor evaluates the color of an object and outputs one of the following values:
+        return ultrasonic_q.distance_centimeters();
     }
     
     bool get_touch_pressed()
@@ -60,14 +59,9 @@ public:
         return m_escape;
     }
 
-    virtual int  get_time()
-    {
-        return 30;
-    }
-    
     virtual int  get_speed()
     {
-        return 100; //여길만지면 빨라지고 시간단축 할듯!
+        return 100;
     }
 
     virtual void set_down(bool val)
@@ -77,18 +71,17 @@ public:
     
     virtual void set_up(bool val)
     {
-        m_up = val;
+        m_up = val;    
     }
     
     virtual void set_right(bool val)
     {
-        m_right = val;
+        m_right = val;   
     }
-    
     virtual void set_left(bool val)
     {
-        m_left = val;
-    }
+        m_left = val; 
+    } 
     
     virtual void set_enter(bool val)
     {
@@ -105,66 +98,62 @@ public:
         m_speed = val;    
     }
 public:
-    void example_code();
+    void start();
+    void find_Obs();
+    void put_Obs();
+    
 };
 
-void Crain::example_code()
-{
-    while(get_escape() == false)
-    {
-        set_down(ev3dev::button::down.pressed());
-        set_up(ev3dev::button::up.pressed());
-        set_right(ev3dev::button::right.pressed());
-        set_left(ev3dev::button::left.pressed());
-        set_escape(ev3dev::button::back.pressed());
-        set_enter(ev3dev::button::enter.pressed());
-        
-        for(int i = 0; i < 3; i++ )//장애물 3개
-        {
-            b.set_speed_sp(get_speed()); //b= r/l
-            b.set_position_sp(560);
-            b.run_to_abs_pos();
-            
-            if(b.position_sp() == 560)
-            {
-                a.set_speed_sp(get_speed());
-                a.set_position_sp(300);
-                a.run_to_abs_pos();
-                if(a.position_sp()==300)
-                    {
-                        c.set_speed_sp(get_speed());
-                        c.set_position_sp(80);
-                        c.run_to_abs_pos();
-                    }
-            }
-            
-            if(get_color() != 6)//완성되면 != white color(6)으로 바꿔주자!
-            {
-                b.stop(); //if color sensor find black color, then stop
-                //b position memory
-                a.set_speed_sp(get_speed());//일정하게 내려가야함
-                c.set_speed_sp(get_speed());//잡아주고,(대신 계속 돌아가면 rotate되니까 일정한 값을 다시 시도해보자
-                a.set_speed_sp(-1*get_speed());//올라가고
-                b.set_speed_sp(-1* get_speed());//finish point까지 가야함.
-                //b position memory자리로 돌아감
-            }
-        }
-        
-    }
-
-    a.stop();
-    b.stop();
-    c.stop();
+void Crain::put_Obs(){
+    c.set_speed_sp(-1 * get_speed());
+    c.run_forever();
 }
 
-int main()
-{     
+void Crain::find_Obs(){
+    float dist;
+    dist=get_distance();
+    while(dist > 5){
+        dist=get_distance();
+        if(dist <= 7){
+            b.stop();
+            b.set_position_sp(-20);
+            b.run_to_rel_pos();
+            a.set_speed_sp(get_speed());
+            a.set_position_sp(200);
+            a.run_to_abs_pos();
+            sleep(2);
+            
+            
+            c.set_speed_sp(get_speed());
+            c.run_forever();
+            sleep(2);
+            
+            a.set_speed_sp(-1*get_speed());
+            a.set_position_sp(0);
+            a.run_to_abs_pos();
+            break;
+        }
+    }
+}
+
+void Crain::start(){
+    b.set_speed_sp(get_speed());
+    b.set_position_sp(560);
+    b.run_to_abs_pos();
+}
+
+int main(){
+    int pos;
     Crain crain;
     while(true){
-        if(crain.get_touch_pressed()==true){ 
-            
-        crain.example_code();  
-  
+        if(crain.get_touch_pressed()==true){
+            crain.start();
+            //sleep(2);
+            crain.find_Obs();
+            //sleep(2);
+            crain.start();
+            sleep(1);
+            crain.put_Obs();
         }
     }
 }
